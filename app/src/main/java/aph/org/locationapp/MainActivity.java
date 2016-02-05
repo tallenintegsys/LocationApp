@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,17 +18,22 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.PlaceDetectionApi;
+import com.google.android.gms.location.places.PlaceFilter;
 
 public class MainActivity extends AppCompatActivity
         implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
     static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
     private static final int FINE_LOCATION_PERMISSION = 1;
+    TextView mProvider, mLatLon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mProvider = (TextView)findViewById(R.id.provider);
+        mLatLon = (TextView)findViewById(R.id.latlon);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -44,7 +50,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(TAG, "connected");
+        mLatLon.setText("connected...");
         startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "connection suspended");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i(TAG, "connection failed");
     }
 
     protected void startLocationUpdates() {
@@ -63,17 +80,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i(TAG, "location: lat="+location.getLatitude()+" lon="+location.getLongitude());
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "connection suspended");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i(TAG, "connection failed");
+        String provider = ""+location.getAccuracy();
+        String latlon = "location: "+location.getLatitude()+", "+location.getLongitude();
+        Log.i(TAG, latlon);
+        mProvider.setText(provider);
+        mLatLon.setText(latlon);
     }
 
     @Override
