@@ -1,6 +1,9 @@
 package aph.org.locationapp;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -9,7 +12,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,14 +31,25 @@ public class MainActivity extends AppCompatActivity
     static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
     private static final int FINE_LOCATION_PERMISSION = 1;
-    TextView mProvider, mLatLon;
+    TextView mProvider, mAccuracy, mLatLon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mProvider = (TextView)findViewById(R.id.provider);
+        mAccuracy = (TextView)findViewById(R.id.accuracy);
         mLatLon = (TextView)findViewById(R.id.latlon);
+
+        final Context context = this.getApplicationContext();
+        mLatLon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setPrimaryClip(ClipData.newPlainText("latlon", mLatLon.getText()));
+                Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -80,11 +96,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        String provider = ""+location.getAccuracy();
-        String latlon = "location: "+location.getLatitude()+", "+location.getLongitude();
-        Log.i(TAG, latlon);
-        mProvider.setText(provider);
-        mLatLon.setText(latlon);
+        mProvider.setText(""+location.getProvider());
+        mAccuracy.setText(""+location.getAccuracy());
+        mLatLon.setText(""+location.getLatitude()+", "+location.getLongitude());
     }
 
     @Override

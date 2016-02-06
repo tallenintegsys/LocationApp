@@ -10,24 +10,63 @@
     tools:context="aph.org.locationapp.MainActivity">
 
     <TextView
+        android:id="@+id/providerlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="provider:   "
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/provider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="provider"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:textIsSelectable="true"
+        android:layout_toRightOf="@+id/providerlabel"
+        android:layout_toEndOf="@+id/providerlabel" />
+
+    <TextView
+        android:id="@+id/accuracylabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="accuracy:   "
+        android:layout_below="@+id/providerlabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/provider" />
+        android:layout_marginTop="14dp" />
+
     <TextView
+        android:id="@+id/accuracy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="accuracy in meters"
+        android:textIsSelectable="true"
+        android:layout_above="@+id/latlon"
+        android:layout_alignTop="@+id/accuracylabel"
+        android:layout_toRightOf="@+id/accuracylabel"
+        android:layout_toEndOf="@+id/accuracylabel" />
+
+    <TextView
+        android:id="@+id/latlonlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="location:   "
+        android:layout_below="@+id/accuracylabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp" />
+
+    <TextView
+        android:id="@+id/latlon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="lat, lon"
-        android:id="@+id/latlon"
-        android:layout_below="@+id/provider"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="25dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textIsSelectable="true"
+        android:layout_alignTop="@+id/latlonlabel"
+        android:layout_toRightOf="@+id/latlonlabel"
+        android:layout_toEndOf="@+id/latlonlabel" />
 
 </RelativeLayout>
